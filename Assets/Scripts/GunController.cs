@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+[AddComponentMenu("Gun Controller")]
 public class GunController : MonoBehaviour
 {
     private Vector3 target;
