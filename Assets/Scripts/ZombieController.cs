@@ -18,13 +18,12 @@ public class ZombieController : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        //this.transform.position = new Vector3(0, 0, 0);
         SelectMoveSpeed();
     }
 
     private void SelectMoveSpeed()
     {
-        moveSpeed = Random.Range(MinMoveSpeed, MaxMoveSpeed + 0.1f);
+        moveSpeed = Random.Range(MinMoveSpeed, MaxMoveSpeed);
     }
 
     // Update is called once per frame
