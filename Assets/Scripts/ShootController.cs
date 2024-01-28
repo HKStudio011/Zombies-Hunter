@@ -20,7 +20,6 @@ public class ShootController : MonoBehaviour
     [Tooltip("Bullet Speed")] [SerializeField] private float shotPower = 500f;
     [Tooltip("Casing Ejection Speed")] [SerializeField] private float ejectPower = 150f;
 
-
     void Start()
     {
         if (barrelLocation == null)
@@ -54,14 +53,37 @@ public class ShootController : MonoBehaviour
             Destroy(tempFlash, destroyTimer);
         }
 
-        //cancels if there's no bullet prefeb
-        if (!bulletPrefab)
-        { return; }
+        if (bulletPrefab)
+        {
+            // Create a bullet and add force on it in direction of the barrel
+            GameObject tempBullet;
+            tempBullet = Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation);
+            tempBullet.GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
 
-        // Create a bullet and add force on it in direction of the barrel
-        Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation).GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
+            //Destroy the bullet
+            Destroy(tempBullet, destroyTimer);
+        }
+
+        // Fire and destroy enemy
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.parent == null)
+            {
+                return;
+            }
+            if(hit.transform.parent.tag.Equals("Enemy"))
+            {
+                Destroy(hit.transform.parent.gameObject);
+            }
+        }
 
     }
+
+
 
     //This function creates a casing at the ejection slot
     void CasingRelease()
