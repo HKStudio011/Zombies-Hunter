@@ -13,17 +13,30 @@ public class ZombieController : MonoBehaviour
     public float StopPositionOfZ = 1.0f;
     private GameObject player;
     private Vector3 target;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        animator = GetComponent<Animator>();
         SelectMoveSpeed();
     }
 
     private void SelectMoveSpeed()
     {
         moveSpeed = Random.Range(MinMoveSpeed, MaxMoveSpeed);
+        if(animator != null) 
+        {
+            if(moveSpeed >= (MinMoveSpeed+ MaxMoveSpeed) / 2)
+            {
+                animator.SetTrigger("Run");
+            }
+            else
+            {
+                animator.SetTrigger("Walk");
+            }
+        }
     }
 
     // Update is called once per frame
@@ -40,10 +53,25 @@ public class ZombieController : MonoBehaviour
         }
         this.transform.LookAt(player.transform);
 
-        if((player.transform.position.z - this.transform.position.z) >= StopPositionOfZ)
+        if((player.transform.position.z - this.transform.position.z) >= StopPositionOfZ && moveSpeed != 0.0f)
         {
             this.transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
+        else
+        {
+            moveSpeed = 0.0f;
+        }
 
+        if(moveSpeed == 0.0f )
+        {
+            animator.SetTrigger("Attack");
+        }
+
+    }
+
+    // animation event
+    void Dead()
+    {
+        Destroy(this.gameObject);
     }
 }
