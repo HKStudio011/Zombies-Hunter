@@ -14,7 +14,8 @@ public class ZombieController : MonoBehaviour
     private GameObject player;
     private Vector3 target;
     private Animator animator;
-
+    [Header("DesTroy")]
+    public float DestroyTime = 2.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +73,7 @@ public class ZombieController : MonoBehaviour
     // animation event
     void Dead()
     {
-        Destroy(this.gameObject);
+        moveSpeed = 0.0f;
+        Destroy(this.gameObject, DestroyTime);
     }
 }

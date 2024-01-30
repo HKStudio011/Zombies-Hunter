@@ -400,6 +400,7 @@ MonoBehaviour:
   MinMoveSpeed: 0.5
   MaxMoveSpeed: 3
   StopPositionOfZ: 1
+  DestroyTime: 2
 --- !u!1 &7653826530210491286 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3731116051764432412, guid: 6dc4cf4496348884d8ee27743ae38562, type: 3}

@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [AddComponentMenu("Shoot Controller")]
 public class ShootController : MonoBehaviour
@@ -16,9 +20,9 @@ public class ShootController : MonoBehaviour
     [SerializeField] private Transform casingExitLocation;
 
     [Header("Settings")]
-    [Tooltip("Specify time to destory the casing object")] [SerializeField] private float destroyTimer = 2f;
-    [Tooltip("Bullet Speed")] [SerializeField] private float shotPower = 500f;
-    [Tooltip("Casing Ejection Speed")] [SerializeField] private float ejectPower = 150f;
+    [Tooltip("Specify time to destory the casing object")][SerializeField] private float destroyTimer = 2f;
+    [Tooltip("Bullet Speed")][SerializeField] private float shotPower = 500f;
+    [Tooltip("Casing Ejection Speed")][SerializeField] private float ejectPower = 150f;
 
     void Start()
     {
@@ -36,9 +40,27 @@ public class ShootController : MonoBehaviour
         {
             //Calls animation on the gun that has the relevant animation events that will fire
             gunAnimator.SetTrigger("Fire");
+            // handle enemy after fire
+            Fire();
         }
     }
 
+    void Fire()
+    {
+        // Fire and destroy enemy
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+
+            if (hit.transform.parent != null && hit.transform.parent.tag.Equals("Enemy"))
+            {
+                hit.transform.parent.GetComponent<Animator>().SetTrigger("Dead");
+            }
+        }
+
+    }
 
     //This function creates the bullet behavior
     void Shoot()
@@ -63,24 +85,6 @@ public class ShootController : MonoBehaviour
             //Destroy the bullet
             Destroy(tempBullet, destroyTimer);
         }
-
-        // Fire and destroy enemy
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            if (hit.transform.parent == null)
-            {
-                return;
-            }
-            if(hit.transform.parent.tag.Equals("Enemy"))
-            {
-                hit.transform.parent.GetComponent<Animator>()?.SetTrigger("Dead");
-            }
-        }
-
     }
 
 
