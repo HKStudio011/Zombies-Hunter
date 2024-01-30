@@ -16,6 +16,8 @@ public class ZombieController : MonoBehaviour
     private Animator animator;
     [Header("DesTroy")]
     public float DestroyTime = 2.0f;
+    private bool IsDead = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,16 +65,23 @@ public class ZombieController : MonoBehaviour
             moveSpeed = 0.0f;
         }
 
-        if(moveSpeed == 0.0f )
+        if(moveSpeed == 0.0f && !IsDead)
         {
             animator.SetTrigger("Attack");
         }
 
     }
 
+    public void SetDead()
+    {
+
+        animator.SetTrigger("Dead");
+    }
+
     // animation event
     void Dead()
     {
+        IsDead = true;
         moveSpeed = 0.0f;
         Destroy(this.gameObject, DestroyTime);
     }

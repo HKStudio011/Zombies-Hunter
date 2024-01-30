@@ -40,26 +40,7 @@ public class ShootController : MonoBehaviour
         {
             //Calls animation on the gun that has the relevant animation events that will fire
             gunAnimator.SetTrigger("Fire");
-            // handle enemy after fire
-            Fire();
         }
-    }
-
-    void Fire()
-    {
-        // Fire and destroy enemy
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-
-            if (hit.transform.parent != null && hit.transform.parent.tag.Equals("Enemy"))
-            {
-                hit.transform.parent.GetComponent<Animator>().SetTrigger("Dead");
-            }
-        }
-
     }
 
     //This function creates the bullet behavior
@@ -84,6 +65,19 @@ public class ShootController : MonoBehaviour
 
             //Destroy the bullet
             Destroy(tempBullet, destroyTimer);
+        }
+
+        // Fire and destroy enemy
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+
+            if (hit.transform.parent != null && hit.transform.parent.tag.Equals("Enemy"))
+            {
+                hit.transform.parent.gameObject.GetComponent<Animator>()?.SetTrigger("Dead");
+            }
         }
     }
 
