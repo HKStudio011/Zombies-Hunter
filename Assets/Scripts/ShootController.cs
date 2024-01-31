@@ -76,7 +76,7 @@ public class ShootController : MonoBehaviour
 
             if (hit.transform.parent != null && hit.transform.parent.tag.Equals("Enemy"))
             {
-                hit.transform.parent.gameObject.GetComponent<Animator>()?.SetTrigger("Dead");
+                hit.transform.parent.gameObject.GetComponent<ZombieController>().SetDead();
             }
         }
     }

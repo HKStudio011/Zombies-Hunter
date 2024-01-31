@@ -71,17 +71,19 @@ public class ZombieController : MonoBehaviour
         }
 
     }
-
     public void SetDead()
     {
-
+        IsDead = true;
+        var childComponents = gameObject.GetComponentsInChildren<MeshCollider>();
+        foreach(var childComponent in childComponents)
+        {
+            childComponent.enabled = false;
+        }
         animator.SetTrigger("Dead");
     }
-
     // animation event
     void Dead()
     {
-        IsDead = true;
         moveSpeed = 0.0f;
         Destroy(this.gameObject, DestroyTime);
     }
