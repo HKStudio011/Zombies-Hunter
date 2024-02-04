@@ -6,16 +6,22 @@ using UnityEngine;
 public class ZombieController : MonoBehaviour
 {
     [Header("Speed")]
-    public float MinMoveSpeed = 0.05f;
-    public float MaxMoveSpeed = 0.3f;
+    public float MinMoveSpeed = 1.0f;
+    public float MaxMoveSpeed = 3.0f;
+    public float MinAttackSpeed = 1.0f;
+    public float MaxAttackSpeed = 3.0f;
+    private float lastTImeOfAttack;
     private float moveSpeed;
-    [Header("Stop Position")]
-    public float StopPositionOfZ = 1.0f;
+    private float attackSpeed;
+    [Header("Range")]
+    public float AttackRange = 1.0f;
+
     private GameObject player;
-    private Vector3 target;
     private Animator animator;
+
     [Header("DesTroy")]
     public float DestroyTime = 2.0f;
+
     private bool IsDead = false;
 
     // Start is called before the first frame update
@@ -24,6 +30,12 @@ public class ZombieController : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
         SelectMoveSpeed();
+        SelectAttackSpeed();
+    }
+
+    private void SelectAttackSpeed()
+    {
+        attackSpeed = Random.Range(MinAttackSpeed, MaxAttackSpeed);
     }
 
     private void SelectMoveSpeed()
@@ -48,15 +60,27 @@ public class ZombieController : MonoBehaviour
         MoveToPlayer();
     }
 
+    void UpdateLastTimeOfAttack()
+    {
+        lastTImeOfAttack = Time.time;
+    }
+
+    void SetAttack()
+    {
+        UpdateLastTimeOfAttack();
+        animator.SetTrigger("Attack");
+        animator.SetTrigger("Idle Affter Attack");
+    }
+
     void MoveToPlayer()
     {
-        if(target == null)
+        if(player == null)
         {
             return;
         }
         this.transform.LookAt(player.transform);
 
-        if((player.transform.position.z - this.transform.position.z) >= StopPositionOfZ && moveSpeed != 0.0f)
+        if(Vector3.Distance(player.transform.position,this.transform.position) >= AttackRange  && moveSpeed != 0.0f)
         {
             this.transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
@@ -67,7 +91,14 @@ public class ZombieController : MonoBehaviour
 
         if(moveSpeed == 0.0f && !IsDead)
         {
-            animator.SetTrigger("Attack");
+            if(lastTImeOfAttack == 0.0f)
+            {
+                SetAttack();
+            }
+            else if((lastTImeOfAttack + attackSpeed) <= Time.time)
+            {
+                SetAttack();
+            }
         }
 
     }
@@ -86,5 +117,10 @@ public class ZombieController : MonoBehaviour
     {
         moveSpeed = 0.0f;
         Destroy(this.gameObject, DestroyTime);
+    }
+
+    private void Attack()
+    {
+        
     }
 }

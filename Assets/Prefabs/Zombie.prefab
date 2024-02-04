@@ -449,9 +449,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5de64ab33cf8ac489fb0d0a36e76d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinMoveSpeed: 0.5
+  MinMoveSpeed: 1
   MaxMoveSpeed: 3
-  StopPositionOfZ: 1
+  MinAttackSpeed: 1
+  MaxAttackSpeed: 3
+  AttackRange: 1
   DestroyTime: 2
 --- !u!1 &7653826530210491286 stripped
 GameObject:
